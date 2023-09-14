@@ -72,7 +72,7 @@ class FeedForwardBlock(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.linear_2 = nn.Linear(d_ff, d_model)  # W2 and b2
 
-    def FeedForwardBlock(self, x):
+    def forward(self, x):
         # (Batch, seq_len, d_model) --> (Batch, seq_len, d_ff) --> (Batch, seq_len, d_model)
         return self.linear_2(self.dropout(torch.relu(self.linear_1(x))))
 
@@ -166,7 +166,7 @@ class EncoderBlock(nn.Module):
             [ResidualConnection(dropout) for _ in range(2)]
         )
 
-    def FeedForwardBlock(self, x, src_mask):
+    def forward(self, x, src_mask):
         x = self.residual_connections[0](
             x, lambda x: self.self_attention_block(x, x, x, src_mask)
         )
